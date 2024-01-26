@@ -3,6 +3,8 @@ export const walls = new Set();
 // rocks
 walls.add(`64,80`);
 walls.add(`144,96`)
+walls.add(`224,160`)
+walls.add(`144,176`)
 
 // walls
 walls.add(`48,32`)
@@ -25,6 +27,8 @@ walls.add(`272,96`)
 walls.add(`272,112`)
 walls.add(`272,128`)
 walls.add(`272,144`)
+walls.add(`272,160`)
+walls.add(`272,176`)
 walls.add(`32,48`)
 walls.add(`32,64`)
 walls.add(`32,80`)
@@ -32,3 +36,7 @@ walls.add(`32,96`)
 walls.add(`32,112`)
 walls.add(`32,128`)
 walls.add(`32,144`)
+walls.add(`32,160`)
+walls.add(`32,176`)
+walls.add(`64,176`)
+walls.add(`48,192`)
