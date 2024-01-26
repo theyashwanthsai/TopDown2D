@@ -4,6 +4,8 @@ import {Sprite} from "./src/Sprite.js";
 import { Vector2 } from './src/Vector2';
 import { GameLoop } from './src/GameLoop';
 import { Input } from './src/Input';
+import { gridCells } from './src/helpers/grid';
+import { moveTowards } from './src/helpers/moveTowards'
 
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
@@ -24,38 +26,56 @@ const mc = new Sprite({
   hFrames: 3,
   vFrames: 8,
   frame: 1,
+  position: new Vector2(gridCells(6), gridCells(5))
 })
+
+const mcDestinationPosition = mc.position.duplicate()
 
 const shadow = new Sprite({
   resource: resources.images.shadow,
   frameSize: new Vector2(32, 32)
 })
 
-const mcPos = new Vector2(16*6, 16*6);
+
 const input = new Input;
 
 const moveMC = (key) => {
+  if(!input.direction){
+    return;
+  }
+
+  let nextX = mcDestinationPosition.x;
+  let nextY = mcDestinationPosition.y;
+  const gridSize = 16;
+
   if(key === "UP") {
-    mcPos.y -= 1;
+    nextY -= gridSize
     mc.frame = 6;
   }
   if(key === "DOWN"){
-    mcPos.y += 1;
+    nextY += gridSize
     mc.frame = 0;
   } 
   if(key === "LEFT"){
-    mcPos.x -= 1;
+    nextX -= gridSize
     mc.frame = 9;
   } 
   if(key === "RIGHT"){
-    mcPos.x += 1;
+    nextX += gridSize
     mc.frame = 3;
   } 
+
+  mcDestinationPosition.x = nextX;
+  mcDestinationPosition.y = nextY;
 }
 
 const update = () => {
   // updating entities can be done here
-  moveMC(input.direction)
+  const distance = moveTowards(mc, mcDestinationPosition, 1)
+  const hasArrived = distance <= 1;
+  if(hasArrived){
+    moveMC(input.direction)
+  }
 }
 
 
@@ -65,8 +85,8 @@ const draw = () => {
 
   // set the position
   const mcOffset = new Vector2(-8, -21);
-  const mcposX = mcPos.x + mcOffset.x;
-  const mcposY = mcPos.y + mcOffset.y;
+  const mcposX = mc.position.x + mcOffset.x;
+  const mcposY = mc.position.y + mcOffset.y;
 
   shadow.drawImage(ctx, mcposX, mcposY);
   mc.drawImage(ctx, mcposX, mcposY);
