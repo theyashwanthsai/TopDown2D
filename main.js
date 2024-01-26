@@ -3,10 +3,14 @@ import {resources} from "./src/Resources.js";
 import {Sprite} from "./src/Sprite.js";
 import { Vector2 } from './src/Vector2';
 import { GameLoop } from './src/GameLoop';
-import { Input } from './src/Input';
+import { DOWN, Input, RIGHT, UP, LEFT } from './src/Input';
 import { gridCells, isSpaceFree } from './src/helpers/grid';
 import { moveTowards } from './src/helpers/moveTowards'
 import { walls } from './src/levels/level1';
+import { Animations } from './src/Animations';
+import { FrameIndexPattern } from './src/FrameIndexPattern';
+import { WALK_DOWN, WALK_LEFT, WALK_RIGHT, WALK_UP,STAND_UP, STAND_DOWN, STAND_LEFT,STAND_RIGHT  } from './src/objects/Hero/heroAnimations';
+
 
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
@@ -28,10 +32,21 @@ const mc = new Sprite({
   hFrames: 5,
   vFrames: 4,
   frame: 1,
-  position: new Vector2(gridCells(6), gridCells(6))
+  position: new Vector2(gridCells(6), gridCells(6)),
+  animations: new Animations({
+    walkDown: new FrameIndexPattern(WALK_DOWN),
+    walkUp: new FrameIndexPattern(WALK_UP),
+    walkLeft: new FrameIndexPattern(WALK_LEFT),
+    walkRight: new FrameIndexPattern(WALK_RIGHT),
+    standUp: new FrameIndexPattern(STAND_UP),
+    standDown: new FrameIndexPattern(STAND_DOWN),
+    standLeft: new FrameIndexPattern(STAND_LEFT),
+    standRight: new FrameIndexPattern(STAND_RIGHT)
+  })
 })
 
 const mcDestinationPosition = mc.position.duplicate()
+let mcFacing = DOWN;
 
 const shadow = new Sprite({
   resource: resources.images.shadow,
@@ -43,6 +58,10 @@ const input = new Input;
 
 const moveMC = (key) => {
   if(!input.direction){
+    if(mcFacing === LEFT){ mc.animations.play("standLeft")}
+    if(mcFacing === DOWN){ mc.animations.play("standDown")}
+    if(mcFacing === RIGHT){ mc.animations.play("standRight")}
+    if(mcFacing === UP){ mc.animations.play("standUp")}
     return;
   }
 
@@ -52,20 +71,22 @@ const moveMC = (key) => {
 
   if(key === "UP") {
     nextY -= gridSize
-    mc.frame = 6;
+    mc.animations.play("walkUp")
   }
   if(key === "DOWN"){
     nextY += gridSize
-    mc.frame = 0;
+    mc.animations.play("walkDown")
   } 
   if(key === "LEFT"){
     nextX -= gridSize
-    mc.frame = 11;
+    mc.animations.play("walkLeft")
   } 
   if(key === "RIGHT"){
     nextX += gridSize
-    mc.frame = 16;
+    mc.animations.play("walkRight")
   } 
+
+  mcFacing = input.direction ?? mcFacing;
 
   // check for collision
   if(isSpaceFree(walls, nextX, nextY)){
@@ -75,13 +96,16 @@ const moveMC = (key) => {
   }
 }
 
-const update = () => {
+const update = (delta) => {
   // updating entities can be done here
   const distance = moveTowards(mc, mcDestinationPosition, 1)
   const hasArrived = distance <= 1;
   if(hasArrived){
     moveMC(input.direction)
   }
+
+  // animations
+  mc.step(delta);
 }
 
 
