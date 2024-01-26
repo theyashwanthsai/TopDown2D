@@ -53,7 +53,9 @@ export class Input {
 
     onArrowReleased(direction){
         const index = this.heldDirections.indexOf(direction);
-        if(index === 1) return;
+        if(index === -1) {
+            return;
+        }
 
         this.heldDirections.splice(index, 1);
     }

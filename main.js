@@ -58,11 +58,11 @@ const moveMC = (key) => {
   } 
   if(key === "LEFT"){
     nextX -= gridSize
-    mc.frame = 12;
+    mc.frame = 11;
   } 
   if(key === "RIGHT"){
     nextX += gridSize
-    mc.frame = 17;
+    mc.frame = 16;
   } 
 
   mcDestinationPosition.x = nextX;
