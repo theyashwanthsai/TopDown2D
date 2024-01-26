@@ -2,8 +2,8 @@ class Resources {
     constructor() {
         this.toLoad = {
             sky: "/sprites/sky.png",
-            ground: "/sprites/ground.png",
-            mc: "/sprites/hero-sheet.png",
+            ground: "/sprites/outdoor.png",
+            mc: "/sprites/link-sheet.png",
             shadow: "/sprites/shadow.png",
         };
         // bucket to keep all of our sprites

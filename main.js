@@ -23,8 +23,8 @@ const groundSprite = new Sprite({
 const mc = new Sprite({
   resource: resources.images.mc,
   frameSize: new Vector2(32, 32),
-  hFrames: 3,
-  vFrames: 8,
+  hFrames: 5,
+  vFrames: 4,
   frame: 1,
   position: new Vector2(gridCells(6), gridCells(5))
 })
@@ -58,11 +58,11 @@ const moveMC = (key) => {
   } 
   if(key === "LEFT"){
     nextX -= gridSize
-    mc.frame = 9;
+    mc.frame = 12;
   } 
   if(key === "RIGHT"){
     nextX += gridSize
-    mc.frame = 3;
+    mc.frame = 17;
   } 
 
   mcDestinationPosition.x = nextX;
@@ -88,7 +88,7 @@ const draw = () => {
   const mcposX = mc.position.x + mcOffset.x;
   const mcposY = mc.position.y + mcOffset.y;
 
-  shadow.drawImage(ctx, mcposX, mcposY);
+  // shadow.drawImage(ctx, mcposX, mcposY);
   mc.drawImage(ctx, mcposX, mcposY);
 }
 
