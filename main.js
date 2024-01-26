@@ -4,8 +4,9 @@ import {Sprite} from "./src/Sprite.js";
 import { Vector2 } from './src/Vector2';
 import { GameLoop } from './src/GameLoop';
 import { Input } from './src/Input';
-import { gridCells } from './src/helpers/grid';
+import { gridCells, isSpaceFree } from './src/helpers/grid';
 import { moveTowards } from './src/helpers/moveTowards'
+import { walls } from './src/levels/level1';
 
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
@@ -17,7 +18,8 @@ const skySprite = new Sprite({
 
 const groundSprite = new Sprite({
   resource: resources.images.ground,
-  frameSize: new Vector2(320, 180)
+  frameSize: new Vector2(320, 180),
+  scale: 1
 })
 
 const mc = new Sprite({
@@ -26,7 +28,7 @@ const mc = new Sprite({
   hFrames: 5,
   vFrames: 4,
   frame: 1,
-  position: new Vector2(gridCells(6), gridCells(5))
+  position: new Vector2(gridCells(6), gridCells(6))
 })
 
 const mcDestinationPosition = mc.position.duplicate()
@@ -65,8 +67,12 @@ const moveMC = (key) => {
     mc.frame = 16;
   } 
 
-  mcDestinationPosition.x = nextX;
-  mcDestinationPosition.y = nextY;
+  // check for collision
+  if(isSpaceFree(walls, nextX, nextY)){
+    console.log(nextX + " " + nextY)
+    mcDestinationPosition.x = nextX;
+    mcDestinationPosition.y = nextY;
+  }
 }
 
 const update = () => {
@@ -80,7 +86,7 @@ const update = () => {
 
 
 const draw = () => {
-  skySprite.drawImage(ctx, 0, 0);
+  // skySprite.drawImage(ctx, 0, 0);
   groundSprite.drawImage(ctx, 0, 0);
 
   // set the position
