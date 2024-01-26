@@ -2,6 +2,8 @@ import './style.css'
 import {resources} from "./src/Resources.js";
 import {Sprite} from "./src/Sprite.js";
 import { Vector2 } from './src/Vector2';
+import { GameLoop } from './src/GameLoop';
+import { Input } from './src/Input';
 
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
@@ -30,6 +32,32 @@ const shadow = new Sprite({
 })
 
 const mcPos = new Vector2(16*6, 16*6);
+const input = new Input;
+
+const moveMC = (key) => {
+  if(key === "UP") {
+    mcPos.y -= 1;
+    mc.frame = 6;
+  }
+  if(key === "DOWN"){
+    mcPos.y += 1;
+    mc.frame = 0;
+  } 
+  if(key === "LEFT"){
+    mcPos.x -= 1;
+    mc.frame = 9;
+  } 
+  if(key === "RIGHT"){
+    mcPos.x += 1;
+    mc.frame = 3;
+  } 
+}
+
+const update = () => {
+  // updating entities can be done here
+  moveMC(input.direction)
+}
+
 
 const draw = () => {
   skySprite.drawImage(ctx, 0, 0);
@@ -47,6 +75,5 @@ const draw = () => {
 
 
 
-setInterval(() => {
-  draw();
-}, 300)
+const gameLoop = new GameLoop(update, draw)
+gameLoop.start();
