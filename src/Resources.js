@@ -5,6 +5,7 @@ class Resources {
             ground: "/sprites/indoor.png",
             mc: "/sprites/link-sheet.png",
             shadow: "/sprites/shadow.png",
+            village: "/sprites/outdoor.png"
         };
         // bucket to keep all of our sprites
         this.images = {};

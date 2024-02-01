@@ -21,9 +21,10 @@ const skySprite = new Sprite({
 })
 
 const groundSprite = new Sprite({
-  resource: resources.images.ground,
-  frameSize: new Vector2(320, 180),
-  scale: 1
+  resource: resources.images.village,
+  frameSize: new Vector2(1920, 720),
+  scale: 1,
+  position: new Vector2(gridCells(0), gridCells(0))
 })
 
 const mc = new Sprite({
